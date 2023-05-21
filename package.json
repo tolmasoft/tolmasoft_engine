@@ -1,5 +1,9 @@
 {
   "scripts": {
     "build": "webpack"
+  },
+  "dependencies": {
+    "@pixi/ui": "^0.7.0",
+    "pixi.js": "^7.2.4"
   }
 }

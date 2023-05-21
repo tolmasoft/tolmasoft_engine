@@ -1,4 +1,4 @@
-import Admin from "./admin";
+import Admin from "../admin/admin";
 
 export default class Utils {
     constructor(){
@@ -16,6 +16,33 @@ export default class Utils {
         rect.endFill();
 
         return rect;
+    }
+
+    drawButton(text = 'Tap Me', x = 0, y = 0, width = 100, height = 30, color = 0x2980b9){
+        let butt = new PIXI.Container();
+        butt.addChild(this.drawTestRect(x - width / 2, y - height / 2, width, height, color));
+
+        let tf = new PIXI.Text(text, {
+            align: "center",
+            fontFamily: "Tahoma",
+            fill: 0xecf0f1,
+            wordWrap: true,
+            wordWrapWidth: width,
+            breakWords: true,
+            fontSize: height/2+'px'
+        });
+
+        tf.x = x - tf.width /2;
+        tf.y = y - tf.height/2;
+
+        butt.tf = tf;
+
+        butt.addChild(tf);
+
+        butt.eventMode = 'static';
+        butt.cursor = 'pointer';
+
+        return butt;
     }
 
     showWarning(text = false, stage, custom_win = false){
@@ -44,19 +71,28 @@ export default class Utils {
                 breakWords: true
             });
 
+            //Тут должно проверяться наличие админ-прав
+            custom_win.butt = this.drawButton('Admin Panel', stage.width / 2, stage.height / 2 + custom_win.tf.height);
+
+            custom_win.addChild(custom_win.butt);
+
+            custom_win.butt.on('pointertap', () => TE.utils.AdminPanel.createSetup())
+            //
             
 
             custom_win.addChild(custom_win.tf);
 
             custom_win.tf.x = stage.width / 2 -  custom_win.tf.width/2;
             custom_win.tf.y = stage.height / 2 - custom_win.tf.height / 2;
-
-            
         }
+
+        
 
         while (window.warning.children.length > 1) window.warning.removeChildAt(1);
 
         window.warning.addChild(custom_win);
+
+        
 
         if (!window.warning.parent)stage.addChild(window.warning);
     }
@@ -81,8 +117,10 @@ export default class Utils {
         return JSON.parse(JSON.stringify(json));
     }
 
-    loadJSON(url = false) {
+    loadJSON(url = false, hash = false) {
         if (!url) return false;
+
+        if(hash)url += '?'+Math.random();
 
         return new Promise(function (resolve, reject) {//reject для возврата ошибок
             var xhr = new XMLHttpRequest();
