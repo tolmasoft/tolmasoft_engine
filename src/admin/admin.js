@@ -1,11 +1,10 @@
-import {TextInput, ScrollBox, Button, } from '@pixi/ui';
-import Setup_Utility from './setup_utility';
+import SetupUtility from './setuputility.js';
 
 export default class Admin{
     constructor(){
         this.bundle_parts = [];
 
-        this.setup = new Setup_Utility();
+        this.setup = new SetupUtility();
     }
 
 
