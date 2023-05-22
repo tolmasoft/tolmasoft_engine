@@ -23,6 +23,7 @@ export default class ScrollBox{
 
         //Пробрасываем некоторые свойства класса в сам бокс
         this.box.addItem = this.addItem;
+        this.box.moveStatus = this.moveStatus;
         this.box.params = this.params = params;
 
         this.box.on('wheel', e=>this.scrollWheel(e.deltaY))
@@ -33,6 +34,9 @@ export default class ScrollBox{
     }
 
     constructBox(){
+        //Тут нужно сделать проверку, сможем ли вместить по ширине несколько слотов, если да - посчитать сколько по горизонтали влезет, посчитать расстояние между ними и выводить как обычно
+
+
         for(let key in this.params['items']){
             this.params['items'][key].y = this.box.show_box.height;
             this.box.show_box.addChild(this.params['items'][key]);
@@ -40,6 +44,8 @@ export default class ScrollBox{
     }
 
     addItem(name, item){
+        //тут нужно будет по принципам описанным в constructbox добавлять просто новый элемент
+
         this.params['items'][name] = item;
 
         this.params['items'][name].y = this.box.show_box.height;
@@ -73,10 +79,13 @@ export default class ScrollBox{
     trackDrag(e){
         this.move_trig = Math.abs((e.client.x + e.client.y) - this.start_point) >= this.drag_sensetive;
 
-        this.box.move_trig = this.move_trig;
 
         if(!this.move_trig)return;
 
-        
+
+    }
+
+    moveStatus(){
+        return this.move_trig;
     }
 }
